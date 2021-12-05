@@ -1,20 +1,30 @@
 package by.overone.clinic;
 
 import by.overone.clinic.dao.impl.UserDAOImpl;
-import by.overone.clinic.model.Role;
+import by.overone.clinic.dto.UserRegistrationDTO;
 import by.overone.clinic.model.User;
+import by.overone.clinic.service.UserService;
+import by.overone.clinic.service.impl.UserServiceImpl;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
 
 
         UserDAOImpl userDAO = new UserDAOImpl();
-        userDAO.getAllUsers();
+        UserService userService = new UserServiceImpl() ;
+
+        List<User> users = userDAO.getAllUsers();
+        users.stream().forEach(System.out::println);
+
+        UserRegistrationDTO userRegistrationDTO= new UserRegistrationDTO();
+        userRegistrationDTO.setLogin("Vasya008");
+        userRegistrationDTO.setPassword("11112222");
+        userRegistrationDTO.setEmail("vasya008@mail.ru");
+
+        userService.addUser(userRegistrationDTO);
 
 //        String userId = "4";
 //
