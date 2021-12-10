@@ -30,17 +30,39 @@ public class UserDAOImpl implements UserDAO {
 
         List<User> users = new ArrayList<>();
 
+        Long id;
+        String name;
+        String surname;
+        String login;
+        String password;
+        String email;
+        String phoneNumber;
+        Role role;
+        String status;
+
         while (resultSet.next()) {
             User user = new User();
-            user.setId(resultSet.getLong(UserConst.ID));
-            user.setName(resultSet.getString(UserConst.NAME));
-            user.setSurname(resultSet.getString(UserConst.SURNAME));
-            user.setLogin(resultSet.getString(UserConst.LOGIN));
-            user.setPassword(resultSet.getString(UserConst.PASSWORD));
-            user.setEmail(resultSet.getString(UserConst.EMAIL));
-            user.setPhoneNumber(resultSet.getString(UserConst.PHONENUMBER));
-            user.setRole(Role.valueOf(resultSet.getString(UserConst.ROLE).toUpperCase(Locale.ROOT)));
-            user.setStatus(resultSet.getString(UserConst.STATUS));
+
+            id = resultSet.getLong(UserConst.ID);
+            name = resultSet.getString(UserConst.NAME);
+            surname = resultSet.getNString(UserConst.SURNAME);
+            login = resultSet.getString(UserConst.LOGIN);
+            password = resultSet.getString(UserConst.PASSWORD);
+            email = resultSet.getString(UserConst.EMAIL);
+            phoneNumber = resultSet.getString(UserConst.PHONENUMBER);
+            role = Role.valueOf(resultSet.getString(UserConst.ROLE).toUpperCase(Locale.ROOT));
+            status = resultSet.getString(UserConst.STATUS);
+
+            user.setId(id);
+            user.setName(name);
+            user.setSurname(surname);
+            user.setLogin(login);
+            user.setPassword(password);
+            user.setEmail(email);
+            user.setPhoneNumber(phoneNumber);
+            user.setRole(role);
+            user.setStatus(status);
+
             users.add(user);
         }
         connection.close();
