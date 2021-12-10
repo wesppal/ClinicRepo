@@ -22,4 +22,9 @@ public class UserValidate {
     private static boolean validatePassword(String password) {
         return !password.isBlank() && !password.isEmpty() && password != null && password.matches(PASS_REGEX);
     }
+
+    public static boolean validateRemoveData(User user) {
+        String loginNull= null;
+        return loginNull != user.getLogin();
+    }
 }

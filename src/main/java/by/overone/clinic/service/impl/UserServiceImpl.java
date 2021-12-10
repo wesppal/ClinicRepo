@@ -51,20 +51,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserRemoveDTO removeUserByLogin(String login) throws SQLException, DAOException {
+    public UserRemoveDTO removeUserByLogin(String login) throws SQLException, DAOException, ServiceExceptions {
         UserRemoveDTO userRemoveDTO = new UserRemoveDTO();
         List<User> users = userDAO.getAllUsers();
         for (int i = 0; i < users.size(); i++) {
             User tempUser = users.get(i);
             if (login.equals(tempUser.getLogin())) {
                 userRemoveDTO.setId(tempUser.getId());
-                userRemoveDTO.setLogin(login);
+                userRemoveDTO.setLogin(tempUser.getLogin());
                 userRemoveDTO.setEmail(tempUser.getEmail());
                 userDAO.removeUserById(tempUser.getId());
-                return userRemoveDTO;
             }
         }
-        return null;
+
+        User user = new User();
+        user.setId(userRemoveDTO.getId());
+        user.setLogin(userRemoveDTO.getLogin());
+        user.setEmail(userRemoveDTO.getEmail());
+
+        if (!UserValidate.validateRemoveData(user)) {
+            throw new ServiceExceptions("UserServiceImpl. Remove failed.");
+        }
+        return userRemoveDTO;
     }
 
 }

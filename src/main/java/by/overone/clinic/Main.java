@@ -41,11 +41,12 @@ public class Main {
 */
 
 
-//        try {
-//            userService.removeUserByLogin("TestUser");
-//        } catch (DAOException e) {
-//            throw new SQLException("Remove failed.");
-//        }
+        try {
+            System.out.println("REMOVED - " + userService.removeUserByLogin("TestUser"));
+        } catch (DAOException | ServiceExceptions e) {
+            throw new SQLException("Remove failed.", e);
+        }
+
         System.out.println("By id " + userDAO.getUserById(4));
         userDAO.getAllUsers().stream().forEach(System.out::println);
     }

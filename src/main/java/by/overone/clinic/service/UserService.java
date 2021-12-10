@@ -13,5 +13,5 @@ import java.util.List;
 public interface UserService {
     List<UserDataDTO> getAllUsers() throws SQLException;
     UserDataDTO addUser(UserRegistrationDTO userRegistrationDTO) throws ServiceExceptions, ValidationException;
-    UserRemoveDTO removeUserByLogin(String login) throws SQLException, DAOException;
+    UserRemoveDTO removeUserByLogin(String login) throws SQLException, DAOException, ServiceExceptions;
 }
