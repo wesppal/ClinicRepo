@@ -19,7 +19,7 @@ public class UserDAOImpl implements UserDAO {
     private final static String GET_ALL_USERS_SQL = "SELECT * FROM user where status!='deleted'";
     private final static String ADD_NEW_USER_SQL = "INSERT INTO user VALUE (0,?,?,?,?,?)";
     private final static String GET_USER_BY_ID_SQL = "SELECT * FROM user WHERE id=(?)";
-    private final static String ADD_USER_DETAILS_SQL = "INSERT INTO details user_id VALUES (?)";
+    private final static String ADD_USER_DETAILS_SQL = "INSERT INTO details (user_id) VALUES (?)";
     private final static String REMOVE_USER_SQL = "UPDATE user SET status =(?) WHERE id=(?)";
 
 
