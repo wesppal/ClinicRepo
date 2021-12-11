@@ -10,13 +10,10 @@ import lombok.NoArgsConstructor;
 
 public class User {
     private long id;
-    private String name;
-    private String surname;
     private String login;
     private String password;
     private String email;
-    private String phoneNumber;
     private Role role;
-    private String status;
+    private Status status;
 
 }

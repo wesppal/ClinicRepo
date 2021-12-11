@@ -2,6 +2,7 @@ package by.overone.clinic.dao.impl;
 
 import by.overone.clinic.dao.UserDAO;
 import by.overone.clinic.model.Role;
+import by.overone.clinic.model.Status;
 import by.overone.clinic.model.User;
 import by.overone.clinic.util.DBConnect;
 import by.overone.clinic.util.constant.UserConst;
@@ -16,9 +17,9 @@ public class UserDAOImpl implements UserDAO {
     private static Connection connection;
 
     private final static String GET_ALL_USERS_SQL = "SELECT * FROM user where status!='deleted'";
-    private final static String ADD_NEW_USER_SQL = "INSERT INTO user VALUE (0,null,null,?,?,?,null,?,?)";
+    private final static String ADD_NEW_USER_SQL = "INSERT INTO user VALUE (0,?,?,?,?,?)";
     private final static String GET_USER_BY_ID_SQL = "SELECT * FROM user WHERE id=(?)";
-    private final static String ADD_USER_DETAILS_SQL = "INSERT INTO details (user_id) VALUES (?)";
+    private final static String ADD_USER_DETAILS_SQL = "INSERT INTO details user_id VALUES (?)";
     private final static String REMOVE_USER_SQL = "UPDATE user SET status =(?) WHERE id=(?)";
 
 
@@ -32,35 +33,26 @@ public class UserDAOImpl implements UserDAO {
             ResultSet resultSet = statement.executeQuery(GET_ALL_USERS_SQL);
 
             long id;
-            String name;
-            String surname;
             String login;
             String password;
             String email;
-            String phoneNumber;
             Role role;
-            String status;
+            Status status;
 
             while (resultSet.next()) {
                 User user = new User();
 
                 id = resultSet.getLong(UserConst.ID);
-                name = resultSet.getString(UserConst.NAME);
-                surname = resultSet.getNString(UserConst.SURNAME);
                 login = resultSet.getString(UserConst.LOGIN);
                 password = resultSet.getString(UserConst.PASSWORD);
                 email = resultSet.getString(UserConst.EMAIL);
-                phoneNumber = resultSet.getString(UserConst.PHONENUMBER);
                 role = Role.valueOf(resultSet.getString(UserConst.ROLE).toUpperCase(Locale.ROOT));
-                status = resultSet.getString(UserConst.STATUS);
+                status = Status.valueOf(resultSet.getString(UserConst.STATUS).toUpperCase(Locale.ROOT));
 
                 user.setId(id);
-                user.setName(name);
-                user.setSurname(surname);
                 user.setLogin(login);
                 user.setPassword(password);
                 user.setEmail(email);
-                user.setPhoneNumber(phoneNumber);
                 user.setRole(role);
                 user.setStatus(status);
 
@@ -91,26 +83,21 @@ public class UserDAOImpl implements UserDAO {
                 throw new DAOException("UserDAOImpl. GetUserById failed. This is no such user.");
             }
 
-            String name = resultSet.getString(UserConst.NAME);
-            String surname = resultSet.getNString(UserConst.SURNAME);
             String login = resultSet.getString(UserConst.LOGIN);
+            String password = resultSet.getString(UserConst.PASSWORD);
             String email = resultSet.getString(UserConst.EMAIL);
-            String phoneNumber = resultSet.getString(UserConst.PHONENUMBER);
             Role role = Role.valueOf(resultSet.getString(UserConst.ROLE).toUpperCase(Locale.ROOT));
-            String status = resultSet.getString(UserConst.STATUS);
+            Status status = Status.valueOf(resultSet.getString(UserConst.STATUS).toUpperCase(Locale.ROOT));
 
             user.setId(id);
-            user.setName(name);
-            user.setSurname(surname);
             user.setLogin(login);
+            user.setPassword(password);
             user.setEmail(email);
-            user.setPhoneNumber(phoneNumber);
             user.setRole(role);
             user.setStatus(status);
         } catch (SQLException e) {
             throw new DAOException("UserDAOImpl. GetUserById failed.", e);
         }
-
         return user;
     }
 
@@ -129,8 +116,8 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setString(1, user.getLogin());
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setString(3, user.getEmail());
-            preparedStatement.setString(4, Role.NEWBIE.toString());
-            preparedStatement.setString(5, UserConst.STATUS_IDENTIFY);
+            preparedStatement.setString(4, Role.USER.toString());
+            preparedStatement.setString(5, Status.VERIFY.toString());
             preparedStatement.executeUpdate();
 
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
@@ -166,7 +153,7 @@ public class UserDAOImpl implements UserDAO {
         try {
             connection = DBConnect.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_USER_SQL);
-            preparedStatement.setString(1, UserConst.STATUS_DELETED);
+            preparedStatement.setString(1, Status.DELETED.toString());
             preparedStatement.setLong(2, id);
             preparedStatement.executeUpdate();
             connection.close();
