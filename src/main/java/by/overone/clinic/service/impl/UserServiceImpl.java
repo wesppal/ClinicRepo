@@ -65,11 +65,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDataDTO removeUserById(long id) throws ServiceExceptions, DAOException {
+    public void removeUserById(long id) throws ServiceExceptions, DAOException {
         UserDataDTO userDataDTO;
         userDataDTO = getUserById(id);
         userDAO.removeUserById(userDataDTO.getId());
-        return userDataDTO;
     }
 
 }

@@ -12,5 +12,5 @@ public interface UserService {
     List<UserDataDTO> getAllUsers() throws ServiceExceptions, DAOException;
     UserDataDTO getUserById(long id) throws ServiceExceptions;
     UserDataDTO addUser(UserRegistrationDTO userRegistrationDTO) throws ServiceExceptions, ValidationException;
-    UserDataDTO removeUserById(long id) throws DAOException, ServiceExceptions;
+    void removeUserById(long id) throws DAOException, ServiceExceptions;
 }

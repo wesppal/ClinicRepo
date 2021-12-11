@@ -17,30 +17,30 @@ public class Main {
         UserService userService = new UserServiceImpl();
 
         //test service addUser
-        UserRegistrationDTO userRegistrationDTO= new UserRegistrationDTO();
-        userRegistrationDTO.setLogin("TestUser5");
-        userRegistrationDTO.setPassword("tested4");
-        userRegistrationDTO.setEmail("Test5@mail.ru");
+//        UserRegistrationDTO userRegistrationDTO= new UserRegistrationDTO();
+//        userRegistrationDTO.setLogin("TestUser5");
+//        userRegistrationDTO.setPassword("tested4");
+//        userRegistrationDTO.setEmail("Test5@mail.ru");
 //
 //
-        try {
-            userService.addUser(userRegistrationDTO);
-        } catch (ServiceExceptions | ValidationException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            userService.addUser(userRegistrationDTO);
+//        } catch (ServiceExceptions | ValidationException e) {
+//            e.printStackTrace();
+//        }
 
         UserDAOImpl userDAO = new UserDAOImpl();
 
         //test service getAllUsers
-//
+
 //        try {
-//            userDAO.removeUserById(5);
+//            userDAO.removeUserById(17);
 //        } catch (DAOException e) {
 //            e.printStackTrace();
 //        }
 
 
-//        System.out.println("REMOVED - " + userService.removeUserById(3));
+        userService.removeUserById(3);
 //        System.out.println("Find user - " + userService.getUserById(4));
 
 //        System.out.println("By id " + userDAO.getUserById(3));
