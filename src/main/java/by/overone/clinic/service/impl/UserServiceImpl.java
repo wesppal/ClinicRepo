@@ -32,11 +32,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDataDTO getUserById(long id) throws ServiceExceptions {
+    public UserDataDTO getUserById(long id) throws ServiceExceptions, ValidationException {
         UserDataDTO userDataDTO = new UserDataDTO();
         User user;
+        if (!UserValidate.validateId(id)) {
+            throw new ValidationException("Incorrect user id.");
+        }
         try {
             user = userDAO.getUserById(id);
+        } catch (DAOException e) {
+            throw new ServiceExceptions("UserServiceImpl. getUserById failed. User not found.");
+        }
+
+        userDataDTO.setId(user.getId());
+        userDataDTO.setLogin(user.getLogin());
+        userDataDTO.setEmail(user.getEmail());
+        return userDataDTO;
+    }
+
+    @Override
+    public UserDataDTO getUserByFullname(String name, String surname) throws ServiceExceptions, ValidationException {
+        if (UserValidate.validateFullnameDate(name,surname)) {
+            throw new ValidationException("Incorrect user details: name, surname.");
+        }
+
+        User user;
+        UserDataDTO userDataDTO = new UserDataDTO();
+
+        try {
+            user = userDAO.getUserByFullName(name,surname);
         } catch (DAOException e) {
             throw new ServiceExceptions("UserServiceImpl. getUserById failed. User not found.");
         }
@@ -65,7 +89,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void removeUserById(long id) throws ServiceExceptions, DAOException {
+    public void removeUserById(long id) throws ServiceExceptions, DAOException, ValidationException {
         UserDataDTO userDataDTO;
         userDataDTO = getUserById(id);
         userDAO.removeUserById(userDataDTO.getId());

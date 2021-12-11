@@ -13,11 +13,11 @@ import java.sql.*;
 
 
 public class Main {
-    public static void main(String[] args) throws DAOException, ServiceExceptions {
+    public static void main(String[] args) throws DAOException, ServiceExceptions, ValidationException {
         UserService userService = new UserServiceImpl();
 
         //test service addUser
-//        UserRegistrationDTO userRegistrationDTO= new UserRegistrationDTO();
+//        UserRegistrationDTO userRegistrationDTO = new UserRegistrationDTO();
 //        userRegistrationDTO.setLogin("TestUser5");
 //        userRegistrationDTO.setPassword("tested4");
 //        userRegistrationDTO.setEmail("Test5@mail.ru");
@@ -40,10 +40,12 @@ public class Main {
 //        }
 
 
-        userService.removeUserById(5);
-//        System.out.println("Find user - " + userService.getUserById(4));
+//        userService.removeUserById(5);
+//        System.out.println("Find user - " + userService.getUserById(0));
 
 //        System.out.println("By id " + userDAO.getUserById(3));
+
+        System.out.println(userService.getUserByFullname("Gon", "Friks"));
         userDAO.getAllUsers().stream().forEach(System.out::println);
     }
 }
