@@ -21,6 +21,8 @@ public class UserDAOImpl implements UserDAO {
     private final static String GET_USER_BY_ID_SQL = "SELECT * FROM user WHERE id=(?)";
     private final static String ADD_USER_DETAILS_SQL = "INSERT INTO details (user_id) VALUES (?)";
     private final static String REMOVE_USER_SQL = "UPDATE user SET status =(?) WHERE id=(?)";
+    private final static String GET_USER_BY_FULLNAME = "SELECT * FROM user " +
+            "JOIN details on (user_id)=id where name=? AND surname=?";
 
 
     @Override
@@ -58,8 +60,8 @@ public class UserDAOImpl implements UserDAO {
 
                 users.add(user);
             }
-        }catch(SQLException e){
-            throw new DAOException("Not connection.",e);
+        } catch (SQLException e) {
+            throw new DAOException("Not connection.", e);
         } finally {
             try {
                 connection.close();
@@ -102,8 +104,36 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User getUserByFullName(String fullName) {
-        return null;
+    public User getUserByFullName(String name, String surname) throws DAOException {
+        User user = new User();
+        try {
+            Connection connection = DBConnect.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_FULLNAME);
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, surname);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.next()) {
+                throw new DAOException("UserDAOImpl. GetUserByFullname failed. This is no such user.");
+            }
+
+            long id = resultSet.getLong(UserConst.ID);
+            String login = resultSet.getString(UserConst.LOGIN);
+            String password = resultSet.getString(UserConst.PASSWORD);
+            String email = resultSet.getString(UserConst.EMAIL);
+            Role role = Role.valueOf(resultSet.getString(UserConst.ROLE).toUpperCase(Locale.ROOT));
+            Status status = Status.valueOf(resultSet.getString(UserConst.STATUS).toUpperCase(Locale.ROOT));
+
+            user.setId(id);
+            user.setLogin(login);
+            user.setPassword(password);
+            user.setEmail(email);
+            user.setRole(role);
+            user.setStatus(status);
+        } catch (SQLException | DAOException e) {
+            throw new DAOException("UserDAOImpl. GetUserByFullname failed.", e);
+        }
+        return user;
     }
 
     @Override
@@ -128,7 +158,6 @@ public class UserDAOImpl implements UserDAO {
                 preparedStatement.setLong(1, user.getId());
                 preparedStatement.executeUpdate();
             }
-
             connection.commit();
         } catch (SQLException e) {
             try {
@@ -144,7 +173,6 @@ public class UserDAOImpl implements UserDAO {
                 e.printStackTrace();
             }
         }
-
         return user;
     }
 

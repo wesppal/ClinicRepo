@@ -40,10 +40,11 @@ public class Main {
 //        }
 
 
-        userService.removeUserById(5);
+//        userService.removeUserById(5);
 //        System.out.println("Find user - " + userService.getUserById(4));
 
 //        System.out.println("By id " + userDAO.getUserById(3));
+        System.out.println(userDAO.getUserByFullName("Gon","Friks"));
         userDAO.getAllUsers().stream().forEach(System.out::println);
     }
 }
