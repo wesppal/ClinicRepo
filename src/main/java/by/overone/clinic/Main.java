@@ -40,7 +40,7 @@ public class Main {
 //        }
 
 
-        userService.removeUserById(3);
+        userService.removeUserById(5);
 //        System.out.println("Find user - " + userService.getUserById(4));
 
 //        System.out.println("By id " + userDAO.getUserById(3));

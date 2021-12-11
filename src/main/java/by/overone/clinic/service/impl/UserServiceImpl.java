@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
         userDataDTO.setId(user.getId());
         userDataDTO.setLogin(user.getLogin());
-        userDataDTO.setEmail(userDataDTO.getEmail());
+        userDataDTO.setEmail(user.getEmail());
         return userDataDTO;
     }
 

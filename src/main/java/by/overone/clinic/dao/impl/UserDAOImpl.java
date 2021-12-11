@@ -160,6 +160,7 @@ public class UserDAOImpl implements UserDAO {
         } catch (SQLException e) {
             try {
                 connection.rollback();
+                throw new DAOException("UserDAOImpl. Already removed.");
             } catch (SQLException ex) {
                 throw new DAOException("UserDAOImpl. Remove failed.");
             }
