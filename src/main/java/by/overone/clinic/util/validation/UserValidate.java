@@ -12,19 +12,15 @@ public class UserValidate {
     }
 
     private static boolean validateLogin(String login) {
-        return !login.isBlank() && !login.isEmpty() && login != null && login.matches(LOGIN_REGEX);
+        return !login.isBlank() && !login.isEmpty() && login.matches(LOGIN_REGEX);
     }
 
     private static boolean validateEmail(String email) {
-        return !email.isBlank() && !email.isEmpty() && email != null && email.matches(EMAIL_REGEX);
+        return !email.isBlank() && !email.isEmpty() && email.matches(EMAIL_REGEX);
     }
 
     private static boolean validatePassword(String password) {
-        return !password.isBlank() && !password.isEmpty() && password != null && password.matches(PASS_REGEX);
+        return !password.isBlank() && !password.isEmpty()  && password.matches(PASS_REGEX);
     }
 
-    public static boolean validateRemoveData(User user) {
-        String loginNull= null;
-        return loginNull != user.getLogin();
-    }
 }

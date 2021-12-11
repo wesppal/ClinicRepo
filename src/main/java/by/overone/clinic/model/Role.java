@@ -4,8 +4,7 @@ public enum Role {
     NEWBIE,
     USER,
     DOCTOR,
-    ADMIN,
-    DELETED
+    ADMIN;
 }
 
 

@@ -13,7 +13,7 @@ import java.sql.*;
 
 
 public class Main {
-    public static void main(String[] args) throws SQLException, DAOException {
+    public static void main(String[] args) throws DAOException, ServiceExceptions {
         UserService userService = new UserServiceImpl();
 
         //test service addUser
@@ -32,22 +32,18 @@ public class Main {
  */
         //test service getAllUsers
         UserDAOImpl userDAO = new UserDAOImpl();
-/*
-        try {
-            userDAO.removeUserById(1);
-        } catch (DAOException e) {
-            e.printStackTrace();
-        }
-*/
+//
+//        try {
+//            userDAO.removeUserById(5);
+//        } catch (DAOException e) {
+//            e.printStackTrace();
+//        }
 
 
-        try {
-            System.out.println("REMOVED - " + userService.removeUserByLogin("TestUser"));
-        } catch (DAOException | ServiceExceptions e) {
-            throw new SQLException("Remove failed.", e);
-        }
+//        System.out.println("REMOVED - " + userService.removeUserById(5));
+        System.out.println("Find user - " + userService.getUserById(5));
 
-        System.out.println("By id " + userDAO.getUserById(4));
+//        System.out.println("By id " + userDAO.getUserById(3));
         userDAO.getAllUsers().stream().forEach(System.out::println);
     }
 }

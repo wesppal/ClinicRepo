@@ -4,7 +4,6 @@ import by.overone.clinic.dao.UserDAO;
 import by.overone.clinic.dao.impl.UserDAOImpl;
 import by.overone.clinic.dto.UserDataDTO;
 import by.overone.clinic.dto.UserRegistrationDTO;
-import by.overone.clinic.dto.UserRemoveDTO;
 import by.overone.clinic.model.User;
 import by.overone.clinic.service.UserService;
 import by.overone.clinic.util.exception.DAOException;
@@ -12,25 +11,40 @@ import by.overone.clinic.util.exception.ServiceExceptions;
 import by.overone.clinic.util.exception.ValidationException;
 import by.overone.clinic.util.validation.UserValidate;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    private UserDAO userDAO = new UserDAOImpl();
+    private final UserDAO userDAO = new UserDAOImpl();
 
     @Override
-    public List<UserDataDTO> getAllUsers() throws SQLException {
+    public List<UserDataDTO> getAllUsers() throws DAOException {
         List<User> users = userDAO.getAllUsers();
         List<UserDataDTO> usersDataDTO = new ArrayList<>();
 
-        for (int i = 0; i < users.size(); i++) {
-            UserDataDTO userDataDTO = new UserDataDTO(users.get(i).getId(), users.get(i).getLogin(),
-                    users.get(i).getEmail());
+        for (User user : users) {
+            UserDataDTO userDataDTO = new UserDataDTO(user.getId(), user.getLogin(),
+                    user.getEmail());
             usersDataDTO.add(userDataDTO);
         }
         return usersDataDTO;
+    }
+
+    @Override
+    public UserDataDTO getUserById(long id) throws ServiceExceptions {
+        UserDataDTO userDataDTO = new UserDataDTO();
+        User user;
+        try {
+            user = userDAO.getUserById(id);
+        } catch (DAOException e) {
+            throw new ServiceExceptions("UserServiceImpl. getUserById failed. User not found.");
+        }
+
+        userDataDTO.setId(user.getId());
+        userDataDTO.setLogin(user.getLogin());
+        userDataDTO.setEmail(userDataDTO.getEmail());
+        return userDataDTO;
     }
 
     @Override
@@ -44,35 +58,18 @@ public class UserServiceImpl implements UserService {
         }
         try {
             user = userDAO.addUser(user);
-        } catch (DAOException | SQLException e) {
+        } catch (DAOException e) {
             throw new ServiceExceptions("UserService. AddUser.User not added.", e);
         }
         return new UserDataDTO(0, user.getLogin(), user.getEmail());
     }
 
     @Override
-    public UserRemoveDTO removeUserByLogin(String login) throws SQLException, DAOException, ServiceExceptions {
-        UserRemoveDTO userRemoveDTO = new UserRemoveDTO();
-        List<User> users = userDAO.getAllUsers();
-        for (int i = 0; i < users.size(); i++) {
-            User tempUser = users.get(i);
-            if (login.equals(tempUser.getLogin())) {
-                userRemoveDTO.setId(tempUser.getId());
-                userRemoveDTO.setLogin(tempUser.getLogin());
-                userRemoveDTO.setEmail(tempUser.getEmail());
-                userDAO.removeUserById(tempUser.getId());
-            }
-        }
-
-        User user = new User();
-        user.setId(userRemoveDTO.getId());
-        user.setLogin(userRemoveDTO.getLogin());
-        user.setEmail(userRemoveDTO.getEmail());
-
-        if (!UserValidate.validateRemoveData(user)) {
-            throw new ServiceExceptions("UserServiceImpl. Remove failed.");
-        }
-        return userRemoveDTO;
+    public UserDataDTO removeUserById(long id) throws ServiceExceptions, DAOException {
+        UserDataDTO userDataDTO;
+        userDataDTO = getUserById(id);
+        userDAO.removeUserById(userDataDTO.getId());
+        return userDataDTO;
     }
 
 }
