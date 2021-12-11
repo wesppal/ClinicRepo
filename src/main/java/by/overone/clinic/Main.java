@@ -14,7 +14,7 @@ import java.sql.*;
 
 public class Main {
     public static void main(String[] args) throws DAOException, ServiceExceptions {
-//        UserService userService = new UserServiceImpl();
+        UserService userService = new UserServiceImpl();
 
         //test service addUser
 //        UserRegistrationDTO userRegistrationDTO= new UserRegistrationDTO();
@@ -40,11 +40,10 @@ public class Main {
 //        }
 
 
-//        userService.removeUserById(5);
+        userService.removeUserById(5);
 //        System.out.println("Find user - " + userService.getUserById(4));
 
 //        System.out.println("By id " + userDAO.getUserById(3));
-        System.out.println(userDAO.getUserByFullName("Gon","Friks"));
-        userDAO.getAllUsers().forEach(System.out::println);
+        userDAO.getAllUsers().stream().forEach(System.out::println);
     }
 }
