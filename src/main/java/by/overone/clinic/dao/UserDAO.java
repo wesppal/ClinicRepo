@@ -1,6 +1,7 @@
 package by.overone.clinic.dao;
 
 import by.overone.clinic.model.User;
+import by.overone.clinic.model.UserDetail;
 import by.overone.clinic.util.exception.DAOException;
 
 import java.util.List;
@@ -11,5 +12,6 @@ public interface UserDAO {
     User getUserByFullName (String name, String surname) throws DAOException;
     User addUser(User user) throws DAOException;
     void removeUserById(long id) throws DAOException;
+    boolean UpdateUserDetails(UserDetail userDetail) throws DAOException;
 
 }

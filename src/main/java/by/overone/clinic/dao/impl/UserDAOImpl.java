@@ -4,6 +4,7 @@ import by.overone.clinic.dao.UserDAO;
 import by.overone.clinic.model.Role;
 import by.overone.clinic.model.Status;
 import by.overone.clinic.model.User;
+import by.overone.clinic.model.UserDetail;
 import by.overone.clinic.util.DBConnect;
 import by.overone.clinic.util.constant.UserConst;
 import by.overone.clinic.util.exception.DAOException;
@@ -19,10 +20,12 @@ public class UserDAOImpl implements UserDAO {
     private final static String GET_ALL_USERS_SQL = "SELECT * FROM user where status!='deleted'";
     private final static String ADD_NEW_USER_SQL = "INSERT INTO user VALUE (0,?,?,?,?,?)";
     private final static String GET_USER_BY_ID_SQL = "SELECT * FROM user WHERE id=(?)";
-    private final static String ADD_USER_DETAILS_SQL = "INSERT INTO details (user_id) VALUES (?)";
+    private final static String ADD_ID_BY_DETAIL_SQL = "INSERT INTO details (user_id) VALUES (?)";
     private final static String REMOVE_USER_SQL = "UPDATE user SET status =(?) WHERE id=(?)";
     private final static String GET_USER_BY_FULLNAME = "SELECT * FROM user " +
             "JOIN details on (user_id)=id where name=? AND surname=?";
+    private final static String ADD_USER_DETAILS_SQL = "UPDATE details SET name =(?), surname = (?), address = (?), " +
+            "phoneNumber = (?) WHERE (user_id)=(?)";
 
 
     @Override
@@ -154,7 +157,7 @@ public class UserDAOImpl implements UserDAO {
 
             while (resultSet.next()) {
                 user.setId(resultSet.getLong(1));
-                preparedStatement = connection.prepareStatement(ADD_USER_DETAILS_SQL);
+                preparedStatement = connection.prepareStatement(ADD_ID_BY_DETAIL_SQL);
                 preparedStatement.setLong(1, user.getId());
                 preparedStatement.executeUpdate();
             }
@@ -184,14 +187,45 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setString(1, Status.DELETED.toString());
             preparedStatement.setLong(2, id);
             preparedStatement.executeUpdate();
-            connection.close();
+
         } catch (SQLException e) {
             try {
                 connection.rollback();
                 throw new DAOException("UserDAOImpl. Already removed.");
             } catch (SQLException ex) {
                 throw new DAOException("UserDAOImpl. Remove failed.");
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
+    }
+
+    @Override
+    public boolean UpdateUserDetails(UserDetail userDetail) throws DAOException {
+        try {
+            connection = DBConnect.getConnection();
+
+            PreparedStatement preparedStatement = connection.prepareStatement(ADD_USER_DETAILS_SQL);
+            preparedStatement.setString(1, userDetail.getName());
+            preparedStatement.setString(2, userDetail.getSurname());
+            preparedStatement.setString(3, userDetail.getAddress());
+            preparedStatement.setString(4, userDetail.getPhoneNumber());
+            preparedStatement.setLong(5, userDetail.getId());
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DAOException("UserDAOImpl. UpdateUserDetails failed.");
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 }
