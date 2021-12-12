@@ -3,6 +3,7 @@ package by.overone.clinic;
 
 import by.overone.clinic.dao.impl.UserDAOImpl;
 import by.overone.clinic.dto.UserRegistrationDTO;
+import by.overone.clinic.model.UserDetail;
 import by.overone.clinic.service.UserService;
 import by.overone.clinic.service.impl.UserServiceImpl;
 import by.overone.clinic.util.exception.DAOException;
@@ -47,5 +48,13 @@ public class Main {
 
         System.out.println(userService.getUserByFullname("Gon", "Friks"));
         userDAO.getAllUsers().stream().forEach(System.out::println);
+
+        UserDetail userDetail = new UserDetail();
+        userDetail.setName("Pol");
+        userDetail.setSurname("Uoker");
+        userDetail.setAddress("Minsk, ulica 12-4");
+        userDetail.setPhoneNumber("+375753332211");
+        userDetail.setId(4);
+        userDAO.UpdateUserDetails(userDetail);
     }
 }
