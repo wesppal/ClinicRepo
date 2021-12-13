@@ -13,5 +13,6 @@ public interface UserDAO {
     User addUser(User user) throws DAOException;
     void removeUserById(long id) throws DAOException;
     boolean UpdateUserDetails(UserDetail userDetail) throws DAOException;
+    public UserDetail getUserDetailById(long id) throws DAOException;
 
 }

@@ -7,6 +7,7 @@ import by.overone.clinic.model.User;
 import by.overone.clinic.model.UserDetail;
 import by.overone.clinic.util.DBConnect;
 import by.overone.clinic.util.constant.UserConst;
+import by.overone.clinic.util.constant.UserDetailConst;
 import by.overone.clinic.util.exception.DAOException;
 
 import java.sql.*;
@@ -26,6 +27,7 @@ public class UserDAOImpl implements UserDAO {
             "JOIN details on (user_id)=id where name=? AND surname=?";
     private final static String ADD_USER_DETAILS_SQL = "UPDATE details SET name =(?), surname = (?), address = (?), " +
             "phoneNumber = (?) WHERE (user_id)=(?)";
+    private final static String GET_USER_DETAIL_BY_ID_SQL = "SELECT * FROM details WHERE user_id=(?)";
 
 
     @Override
@@ -226,6 +228,36 @@ public class UserDAOImpl implements UserDAO {
                 e.printStackTrace();
             }
         }
-        return false;
+        return (getUserDetailById(userDetail.getId()).equals(userDetail)) ? true : false;
+    }
+
+    @Override
+    public UserDetail getUserDetailById(long id) throws DAOException {
+        UserDetail userDetail = new UserDetail();
+        try {
+            Connection connection = DBConnect.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_DETAIL_BY_ID_SQL);
+            preparedStatement.setLong(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.next()) {
+                throw new DAOException("UserDAOImpl. GetUserDetailById failed. This is no such user.");
+            }
+
+            long userId = resultSet.getLong(UserDetailConst.ID);
+            String name = resultSet.getString(UserDetailConst.NAME);
+            String surname = resultSet.getString(UserDetailConst.SURNAME);
+            String address = resultSet.getString(UserDetailConst.ADDRESS);
+            String phoneNumber = resultSet.getString(UserDetailConst.PHONENUMBER);
+
+            userDetail.setId(userId);
+            userDetail.setName(name);
+            userDetail.setSurname(surname);
+            userDetail.setAddress(address);
+            userDetail.setPhoneNumber(phoneNumber);
+        } catch (SQLException e) {
+            throw new DAOException("UserDAOImpl. GetUserById failed.", e);
+        }
+        return userDetail;
     }
 }

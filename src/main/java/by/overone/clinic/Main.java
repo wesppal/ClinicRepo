@@ -46,15 +46,18 @@ public class Main {
 
 //        System.out.println("By id " + userDAO.getUserById(3));
 
-        System.out.println(userService.getUserByFullname("Gon", "Friks"));
-        userDAO.getAllUsers().stream().forEach(System.out::println);
-
+//        System.out.println(userService.getUserByFullname("Gon", "Friks"));
+//        userDAO.getAllUsers().stream().forEach(System.out::println);
+//
         UserDetail userDetail = new UserDetail();
-        userDetail.setName("Pol");
-        userDetail.setSurname("Uoker");
+        userDetail.setName("Polyna");
+        userDetail.setSurname("Uokera");
         userDetail.setAddress("Minsk, ulica 12-4");
-        userDetail.setPhoneNumber("+375753332211");
-        userDetail.setId(4);
-        userDAO.UpdateUserDetails(userDetail);
+        userDetail.setPhoneNumber("+375753332212");
+        userDetail.setId(11);
+//        userDAO.UpdateUserDetails(userDetail);
+
+        System.out.println(userDAO.UpdateUserDetails(userDetail));
+        System.out.println(userDAO.getUserDetailById(3));
     }
 }
