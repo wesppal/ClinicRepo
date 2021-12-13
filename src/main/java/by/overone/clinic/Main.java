@@ -51,13 +51,16 @@ public class Main {
 //
         UserDetail userDetail = new UserDetail();
         userDetail.setName("Polyna");
-        userDetail.setSurname("Uokera");
-        userDetail.setAddress("Minsk, ulica 12-4");
-        userDetail.setPhoneNumber("+375753332212");
-        userDetail.setId(11);
+        userDetail.setSurname("Viera");
+        userDetail.setAddress("Minsk, ulica 12-5");
+        userDetail.setPhoneNumber("+375753332214");
+        userDetail.setId(17);
 //        userDAO.UpdateUserDetails(userDetail);
 
-        System.out.println(userDAO.UpdateUserDetails(userDetail));
-        System.out.println(userDAO.getUserDetailById(3));
+//        System.out.println(userDAO.UpdateUserDetails(userDetail));
+//        System.out.println(userDAO.getUserDetailById(3));
+
+//        System.out.println(userService.getUserDetailById(12));
+        userService.updateUserDetails(userDetail);
     }
 }

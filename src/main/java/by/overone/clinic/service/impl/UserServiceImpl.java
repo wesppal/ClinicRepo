@@ -5,10 +5,12 @@ import by.overone.clinic.dao.impl.UserDAOImpl;
 import by.overone.clinic.dto.UserDataDTO;
 import by.overone.clinic.dto.UserRegistrationDTO;
 import by.overone.clinic.model.User;
+import by.overone.clinic.model.UserDetail;
 import by.overone.clinic.service.UserService;
 import by.overone.clinic.util.exception.DAOException;
 import by.overone.clinic.util.exception.ServiceExceptions;
 import by.overone.clinic.util.exception.ValidationException;
+import by.overone.clinic.util.validation.UserDetailValidate;
 import by.overone.clinic.util.validation.UserValidate;
 
 import java.util.ArrayList;
@@ -93,6 +95,33 @@ public class UserServiceImpl implements UserService {
         UserDataDTO userDataDTO;
         userDataDTO = getUserById(id);
         userDAO.removeUserById(userDataDTO.getId());
+    }
+
+    @Override
+    public boolean updateUserDetails(UserDetail userDetail) throws ServiceExceptions, ValidationException {
+        if (!UserDetailValidate.validateDetails(userDetail)) {
+            throw new ValidationException("Incorrect details data");
+        }
+        try {
+            userDAO.UpdateUserDetails(userDetail);
+        } catch (DAOException e) {
+            throw new ServiceExceptions("UserServiceImpl. UpdateUserDetail failed.");
+        }
+        return true;
+    }
+
+    @Override
+    public UserDetail getUserDetailById(long id) throws ServiceExceptions, ValidationException {
+        if (!UserValidate.validateId(id)) {
+            throw new ValidationException("Incorrect user id.");
+        }
+        UserDetail userDetail;
+        try {
+            userDetail = userDAO.getUserDetailById(id);
+        } catch (DAOException e) {
+            throw new ServiceExceptions("UserServiceImpl. GetUserDetailById failed.");
+        }
+        return userDetail;
     }
 
 }

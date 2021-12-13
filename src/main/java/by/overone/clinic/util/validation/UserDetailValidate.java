@@ -6,7 +6,7 @@ public class UserDetailValidate {
     private final static String NAME_REGEX = "[A-Za-z]+";
     private final static String SURNAME_REGEX = "[A-Za-z]+";
     private final static String ADDRESS_REGEX = "^[\\w]+\\,\\s[\\w]+\\s\\d+.\\d+$";
-    private final static String PHONE_NUMBER_REGEX = "^[+]+[\\d]{11}";
+    private final static String PHONE_NUMBER_REGEX = "^[+]+[\\d]{12}";
 
     public static boolean validateDetails(UserDetail userDetail) {
         return validateName(userDetail.getName()) && validateSurname(userDetail.getSurname()) &&
