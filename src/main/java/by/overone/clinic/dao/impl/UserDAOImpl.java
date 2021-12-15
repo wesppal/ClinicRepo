@@ -103,6 +103,12 @@ public class UserDAOImpl implements UserDAO {
             user.setStatus(status);
         } catch (SQLException e) {
             throw new DAOException("UserDAOImpl. GetUserById failed.", e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return user;
     }
@@ -136,6 +142,12 @@ public class UserDAOImpl implements UserDAO {
             user.setStatus(status);
         } catch (SQLException | DAOException e) {
             throw new DAOException("UserDAOImpl. GetUserByFullname failed.", e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return user;
     }
@@ -231,7 +243,7 @@ public class UserDAOImpl implements UserDAO {
                 e.printStackTrace();
             }
         }
-        updateUserStatus(userDetail.getId(),Status.ACTIVE);
+        updateUserStatus(userDetail.getId(), Status.ACTIVE);
         return getUserDetailById(userDetail.getId()).equals(userDetail);
     }
 
@@ -261,6 +273,12 @@ public class UserDAOImpl implements UserDAO {
             userDetail.setPhoneNumber(phoneNumber);
         } catch (SQLException e) {
             throw new DAOException("UserDAOImpl. GetUserById failed.", e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return userDetail;
     }
@@ -299,6 +317,12 @@ public class UserDAOImpl implements UserDAO {
             user.setPhoneNumber(phoneNumber);
         } catch (SQLException e) {
             throw new DAOException("UserDAOImpl. GetUserById failed.", e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return user;
