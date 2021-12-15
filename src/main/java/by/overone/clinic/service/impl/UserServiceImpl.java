@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
             throw new ValidationException("Incorrect details data");
         }
         try {
-            userDAO.UpdateUserDetails(userDetail);
+            userDAO.updateUserDetails(userDetail);
         } catch (DAOException e) {
             throw new ServiceExceptions("UserServiceImpl. UpdateUserDetail failed.");
         }

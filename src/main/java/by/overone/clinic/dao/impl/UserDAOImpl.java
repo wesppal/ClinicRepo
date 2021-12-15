@@ -182,10 +182,14 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public void removeUserById(long id) throws DAOException {
+        updateUserStatus(id, Status.DELETED);
+    }
+
+    private void updateUserStatus(long id, Status status) throws DAOException {
         try {
             connection = DBConnect.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_STATUS_SQL);
-            preparedStatement.setString(1, Status.DELETED.toString());
+            preparedStatement.setString(1, status.toString());
             preparedStatement.setLong(2, id);
             preparedStatement.executeUpdate();
 
@@ -206,7 +210,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public boolean UpdateUserDetails(UserDetail userDetail) throws DAOException {
+    public boolean updateUserDetails(UserDetail userDetail) throws DAOException {
         try {
             connection = DBConnect.getConnection();
 
@@ -227,28 +231,7 @@ public class UserDAOImpl implements UserDAO {
                 e.printStackTrace();
             }
         }
-
-        try {
-            connection = DBConnect.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_STATUS_SQL);
-            preparedStatement.setString(1, Status.ACTIVE.toString());
-            preparedStatement.setLong(2, userDetail.getId());
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            try {
-                connection.rollback();
-                throw new DAOException("UserDAOImpl. Already removed.");
-            } catch (SQLException ex) {
-                throw new DAOException("UserDAOImpl. Remove failed.");
-            } finally {
-                try {
-                    connection.close();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }
+        updateUserStatus(userDetail.getId(),Status.ACTIVE);
         return getUserDetailById(userDetail.getId()).equals(userDetail);
     }
 
