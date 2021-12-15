@@ -1,10 +1,7 @@
 package by.overone.clinic.dao.impl;
 
 import by.overone.clinic.dao.UserDAO;
-import by.overone.clinic.model.Role;
-import by.overone.clinic.model.Status;
-import by.overone.clinic.model.User;
-import by.overone.clinic.model.UserDetail;
+import by.overone.clinic.model.*;
 import by.overone.clinic.util.DBConnect;
 import by.overone.clinic.util.constant.UserConst;
 import by.overone.clinic.util.constant.UserDetailConst;
@@ -22,12 +19,14 @@ public class UserDAOImpl implements UserDAO {
     private final static String ADD_NEW_USER_SQL = "INSERT INTO user VALUE (0,?,?,?,?,?)";
     private final static String GET_USER_BY_ID_SQL = "SELECT * FROM user WHERE id=(?)";
     private final static String ADD_ID_BY_DETAIL_SQL = "INSERT INTO details (user_id) VALUES (?)";
-    private final static String REMOVE_USER_SQL = "UPDATE user SET status =(?) WHERE id=(?)";
+    private final static String UPDATE_USER_STATUS_SQL = "UPDATE user SET status =(?) WHERE id=(?)";
     private final static String GET_USER_BY_FULLNAME = "SELECT * FROM user " +
             "JOIN details on (user_id)=id where name=? AND surname=?";
     private final static String ADD_USER_DETAILS_SQL = "UPDATE details SET name =(?), surname = (?), address = (?), " +
             "phoneNumber = (?) WHERE (user_id)=(?)";
     private final static String GET_USER_DETAIL_BY_ID_SQL = "SELECT * FROM details WHERE user_id=(?)";
+    private final static String GET_INFO_ALL_USER_BY_ID_SQL = " SELECT distinct * FROM user" +
+            " join  details on user.id = details.user_id where id=(?)";
 
 
     @Override
@@ -185,7 +184,7 @@ public class UserDAOImpl implements UserDAO {
     public void removeUserById(long id) throws DAOException {
         try {
             connection = DBConnect.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(REMOVE_USER_SQL);
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_STATUS_SQL);
             preparedStatement.setString(1, Status.DELETED.toString());
             preparedStatement.setLong(2, id);
             preparedStatement.executeUpdate();
@@ -228,6 +227,28 @@ public class UserDAOImpl implements UserDAO {
                 e.printStackTrace();
             }
         }
+
+        try {
+            connection = DBConnect.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER_STATUS_SQL);
+            preparedStatement.setString(1, Status.ACTIVE.toString());
+            preparedStatement.setLong(2, userDetail.getId());
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+                throw new DAOException("UserDAOImpl. Already removed.");
+            } catch (SQLException ex) {
+                throw new DAOException("UserDAOImpl. Remove failed.");
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
         return getUserDetailById(userDetail.getId()).equals(userDetail);
     }
 
@@ -259,5 +280,44 @@ public class UserDAOImpl implements UserDAO {
             throw new DAOException("UserDAOImpl. GetUserById failed.", e);
         }
         return userDetail;
+    }
+
+    @Override
+    public InfoAllUser getInfoAllUser(long id) throws DAOException {
+        InfoAllUser user = new InfoAllUser();
+
+        try {
+            Connection connection = DBConnect.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_INFO_ALL_USER_BY_ID_SQL);
+            preparedStatement.setLong(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.next()) {
+                throw new DAOException("UserDAOImpl. GetInfoUserById failed. This is no such user.");
+            }
+
+            String login = resultSet.getString(UserConst.LOGIN);
+            String email = resultSet.getString(UserConst.EMAIL);
+            Role role = Role.valueOf(resultSet.getString(UserConst.ROLE).toUpperCase(Locale.ROOT));
+            Status status = Status.valueOf(resultSet.getString(UserConst.STATUS).toUpperCase(Locale.ROOT));
+            String name = resultSet.getString(UserDetailConst.NAME);
+            String surname = resultSet.getString(UserDetailConst.SURNAME);
+            String address = resultSet.getString(UserDetailConst.ADDRESS);
+            String phoneNumber = resultSet.getString(UserDetailConst.PHONENUMBER);
+
+            user.setId(id);
+            user.setLogin(login);
+            user.setEmail(email);
+            user.setRole(role);
+            user.setStatus(status);
+            user.setName(name);
+            user.setSurname(surname);
+            user.setAddress(address);
+            user.setPhoneNumber(phoneNumber);
+        } catch (SQLException e) {
+            throw new DAOException("UserDAOImpl. GetUserById failed.", e);
+        }
+
+        return user;
     }
 }

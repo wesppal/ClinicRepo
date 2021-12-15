@@ -1,5 +1,6 @@
 package by.overone.clinic.dao;
 
+import by.overone.clinic.model.InfoAllUser;
 import by.overone.clinic.model.User;
 import by.overone.clinic.model.UserDetail;
 import by.overone.clinic.util.exception.DAOException;
@@ -13,6 +14,7 @@ public interface UserDAO {
     User addUser(User user) throws DAOException;
     void removeUserById(long id) throws DAOException;
     boolean UpdateUserDetails(UserDetail userDetail) throws DAOException;
-    public UserDetail getUserDetailById(long id) throws DAOException;
+    UserDetail getUserDetailById(long id) throws DAOException;
+    InfoAllUser getInfoAllUser(long id) throws DAOException;
 
 }

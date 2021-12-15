@@ -50,11 +50,11 @@ public class Main {
 //        userDAO.getAllUsers().stream().forEach(System.out::println);
 //
         UserDetail userDetail = new UserDetail();
-        userDetail.setName("Polyna");
-        userDetail.setSurname("Viera");
-        userDetail.setAddress("Minsk, ulica 12-5");
-        userDetail.setPhoneNumber("+375753332214");
-        userDetail.setId(17);
+        userDetail.setName("Vasya");
+        userDetail.setSurname("Poopkin");
+        userDetail.setAddress("Minsk, ulica 15-6");
+        userDetail.setPhoneNumber("+375753332215");
+        userDetail.setId(19);
 //        userDAO.UpdateUserDetails(userDetail);
 
 //        System.out.println(userDAO.UpdateUserDetails(userDetail));
@@ -62,5 +62,6 @@ public class Main {
 
 //        System.out.println(userService.getUserDetailById(12));
         userService.updateUserDetails(userDetail);
+        System.out.println(userDAO.getInfoAllUser(19));
     }
 }
