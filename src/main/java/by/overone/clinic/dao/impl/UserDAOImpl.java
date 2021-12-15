@@ -15,7 +15,7 @@ import java.util.Locale;
 public class UserDAOImpl implements UserDAO {
     private static Connection connection;
 
-    private final static String GET_ALL_USERS_SQL = "SELECT * FROM user where status!='deleted'";
+    private final static String GET_ALL_USERS_SQL = "SELECT * FROM user where status != 'deleted'";
     private final static String ADD_NEW_USER_SQL = "INSERT INTO user VALUE (0,?,?,?,?,?)";
     private final static String GET_USER_BY_ID_SQL = "SELECT * FROM user WHERE id=(?)";
     private final static String ADD_ID_BY_DETAIL_SQL = "INSERT INTO details (user_id) VALUES (?)";
