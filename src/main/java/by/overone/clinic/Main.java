@@ -2,15 +2,11 @@ package by.overone.clinic;
 
 
 import by.overone.clinic.dao.impl.UserDAOImpl;
-import by.overone.clinic.dto.UserRegistrationDTO;
-import by.overone.clinic.model.UserDetail;
 import by.overone.clinic.service.UserService;
 import by.overone.clinic.service.impl.UserServiceImpl;
 import by.overone.clinic.util.exception.DAOException;
 import by.overone.clinic.util.exception.ServiceExceptions;
 import by.overone.clinic.util.exception.ValidationException;
-
-import java.sql.*;
 
 
 public class Main {
@@ -41,7 +37,7 @@ public class Main {
 //        }
 
 
-        userService.removeUserById(17);
+//        userService.removeUserById(17);
 //        System.out.println("Find user - " + userService.getUserById(0));
 
 //        System.out.println("By id " + userDAO.getUserById(3));
@@ -63,5 +59,6 @@ public class Main {
 //        System.out.println(userService.getUserDetailById(12));
 //        userService.updateUserDetails(userDetail);
 //        System.out.println(userDAO.getInfoAllUser(19));
+        System.out.println(userService.getAllUserInfo(19));
     }
 }

@@ -17,15 +17,5 @@ public class InfoAllUser {
     private String address;
     private String phoneNumber;
 
-    public InfoAllUser(User user, UserDetail userDetail) {
-        id = user.getId();
-        login = user.getLogin();
-        email = user.getEmail();
-        role = user.getRole();
-        status = user.getStatus();
-        name = userDetail.getName();
-        surname = userDetail.getSurname();
-        address = userDetail.getAddress();
-        phoneNumber = userDetail.getPhoneNumber();
-    }
+
 }

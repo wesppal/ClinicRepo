@@ -4,6 +4,7 @@ import by.overone.clinic.dao.UserDAO;
 import by.overone.clinic.dao.impl.UserDAOImpl;
 import by.overone.clinic.dto.UserDataDTO;
 import by.overone.clinic.dto.UserRegistrationDTO;
+import by.overone.clinic.model.InfoAllUser;
 import by.overone.clinic.model.User;
 import by.overone.clinic.model.UserDetail;
 import by.overone.clinic.service.UserService;
@@ -124,4 +125,19 @@ public class UserServiceImpl implements UserService {
         return userDetail;
     }
 
+    @Override
+    public InfoAllUser getAllUserInfo(long id) throws ServiceExceptions, ValidationException {
+        if (!UserValidate.validateId(id)){
+            throw new ValidationException("Incorrect user id.");
+        }
+
+        InfoAllUser user;
+        try {
+           user = userDAO.getAllUserInfo(id);
+
+        } catch (DAOException e) {
+            throw new ServiceExceptions("UserServiceImpl. getInfoAllUser failed.");
+        }
+        return user;
+    }
 }

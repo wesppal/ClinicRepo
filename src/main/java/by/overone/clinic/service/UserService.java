@@ -2,6 +2,7 @@ package by.overone.clinic.service;
 
 import by.overone.clinic.dto.UserDataDTO;
 import by.overone.clinic.dto.UserRegistrationDTO;
+import by.overone.clinic.model.InfoAllUser;
 import by.overone.clinic.model.UserDetail;
 import by.overone.clinic.util.exception.DAOException;
 import by.overone.clinic.util.exception.ServiceExceptions;
@@ -16,5 +17,6 @@ public interface UserService {
     UserDataDTO addUser(UserRegistrationDTO userRegistrationDTO) throws ServiceExceptions, ValidationException;
     void removeUserById(long id) throws DAOException, ServiceExceptions, ValidationException;
     boolean updateUserDetails(UserDetail userDetail) throws ServiceExceptions, ValidationException;
-    public UserDetail getUserDetailById(long id) throws ServiceExceptions, ValidationException;
+    UserDetail getUserDetailById(long id) throws ServiceExceptions, ValidationException;
+    InfoAllUser getAllUserInfo(long id) throws ServiceExceptions, ValidationException;
 }

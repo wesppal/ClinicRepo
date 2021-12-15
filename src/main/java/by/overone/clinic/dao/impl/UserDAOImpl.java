@@ -266,7 +266,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public InfoAllUser getInfoAllUser(long id) throws DAOException {
+    public InfoAllUser getAllUserInfo(long id) throws DAOException {
         InfoAllUser user = new InfoAllUser();
 
         try {
