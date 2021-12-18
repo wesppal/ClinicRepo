@@ -315,14 +315,10 @@ public class UserDAOImpl implements UserDAO {
             user.setSurname(surname);
             user.setAddress(address);
             user.setPhoneNumber(phoneNumber);
+
+            connection.close();
         } catch (SQLException e) {
             throw new DAOException("UserDAOImpl. GetUserById failed.", e);
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
 
         return user;
