@@ -2,6 +2,7 @@ package by.overone.clinic;
 
 
 import by.overone.clinic.dao.impl.UserDAOImpl;
+import by.overone.clinic.model.UserDetail;
 import by.overone.clinic.service.UserService;
 import by.overone.clinic.service.impl.UserServiceImpl;
 import by.overone.clinic.util.exception.DAOException;
@@ -45,13 +46,13 @@ public class Main {
 //        System.out.println(userService.getUserByFullname("Gon", "Friks"));
 //        userDAO.getAllUsers().stream().forEach(System.out::println);
 //
-//        UserDetail userDetail = new UserDetail();
-//        userDetail.setName("Vasya");
-//        userDetail.setSurname("Poopkin");
-//        userDetail.setAddress("Minsk, ulica 15-6");
-//        userDetail.setPhoneNumber("+375753332215");
-//        userDetail.setId(19);
-//        userDAO.UpdateUserDetails(userDetail);
+        UserDetail userDetail = new UserDetail();
+        userDetail.setName("Вася");
+        userDetail.setSurname("Пупкин");
+        userDetail.setAddress("Minsk, ulica 15-6");
+        userDetail.setPhoneNumber("+375753332215");
+        userDetail.setId(19);
+        userDAO.updateUserDetails(userDetail);
 
 //        System.out.println(userDAO.UpdateUserDetails(userDetail));
 //        System.out.println(userDAO.getUserDetailById(3));
