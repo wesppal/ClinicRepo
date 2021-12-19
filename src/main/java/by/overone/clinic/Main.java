@@ -2,6 +2,7 @@ package by.overone.clinic;
 
 
 import by.overone.clinic.dao.impl.UserDAOImpl;
+import by.overone.clinic.dto.UserRegistrationDTO;
 import by.overone.clinic.model.UserDetail;
 import by.overone.clinic.service.UserService;
 import by.overone.clinic.service.impl.UserServiceImpl;
@@ -15,17 +16,17 @@ public class Main {
         UserService userService = new UserServiceImpl();
 
         //test service addUser
-//        UserRegistrationDTO userRegistrationDTO = new UserRegistrationDTO();
-//        userRegistrationDTO.setLogin("TestUser5");
-//        userRegistrationDTO.setPassword("tested4");
-//        userRegistrationDTO.setEmail("Test5@mail.ru");
-//
-//
-//        try {
-//            userService.addUser(userRegistrationDTO);
-//        } catch (ServiceExceptions | ValidationException e) {
-//            e.printStackTrace();
-//        }
+        UserRegistrationDTO userRegistrationDTO = new UserRegistrationDTO();
+        userRegistrationDTO.setLogin("TestUser8");
+        userRegistrationDTO.setPassword("tested8");
+        userRegistrationDTO.setEmail("Test8@mail.ru");
+
+
+        try {
+            userService.addUser(userRegistrationDTO);
+        } catch (ServiceExceptions | ValidationException e) {
+            e.printStackTrace();
+        }
 
         UserDAOImpl userDAO = new UserDAOImpl();
 

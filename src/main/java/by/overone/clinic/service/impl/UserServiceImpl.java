@@ -13,6 +13,7 @@ import by.overone.clinic.util.exception.ServiceExceptions;
 import by.overone.clinic.util.exception.ValidationException;
 import by.overone.clinic.util.validation.UserDetailValidate;
 import by.overone.clinic.util.validation.UserValidate;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,9 +83,13 @@ public class UserServiceImpl implements UserService {
         user.setLogin(userRegistrationDTO.getLogin());
         user.setPassword(userRegistrationDTO.getPassword());
         user.setEmail(userRegistrationDTO.getEmail());
+
         if (!UserValidate.validateRegistrationData(user)) {
             throw new ValidationException("Incorrect registration data.");
         }
+
+        user.setPassword(DigestUtils.md5Hex(userRegistrationDTO.getPassword()));
+
         try {
             user = userDAO.addUser(user);
         } catch (DAOException e) {

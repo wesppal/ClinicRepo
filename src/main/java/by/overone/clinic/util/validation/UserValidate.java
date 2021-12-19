@@ -5,7 +5,7 @@ import by.overone.clinic.model.User;
 public class UserValidate {
     private final static String LOGIN_REGEX = "^[\\w]{4,10}$";
     private final static String EMAIL_REGEX = "^[\\S]+@[\\w]+\\.+[A-Za-z]+$";
-    private final static String PASS_REGEX = "[\\w]{2,16}";
+    private final static String PASS_REGEX = "[\\w]{4,16}";
     private final static String FULLNAME_REGEX = "[a-zA-Z]{2,30}";
 
     public static boolean validateRegistrationData(User user) {
