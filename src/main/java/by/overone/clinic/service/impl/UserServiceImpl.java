@@ -16,6 +16,7 @@ import by.overone.clinic.util.validation.UserValidate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserServiceImpl implements UserService {
 
@@ -29,13 +30,9 @@ public class UserServiceImpl implements UserService {
         } catch (DAOException e) {
             throw new ServiceExceptions("UserServiceImpl. getAllUsers failed. Not connection.");
         }
-        List<UserDataDTO> usersDataDTO = new ArrayList<>();
-
-        for (User user : users) {
-            UserDataDTO userDataDTO = new UserDataDTO(user.getId(), user.getLogin(),
-                    user.getEmail());
-            usersDataDTO.add(userDataDTO);
-        }
+        List<UserDataDTO> usersDataDTO;
+        usersDataDTO = users.stream().map(user -> new UserDataDTO(user.getId(),user.getLogin(),user.getEmail()))
+                .collect(Collectors.toList());
         return usersDataDTO;
     }
 
