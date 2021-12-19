@@ -86,7 +86,8 @@ public class UserDAOImpl implements UserDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (!resultSet.next()) {
-                throw new DAOException("UserDAOImpl. GetUserById failed. This is no such user.");
+                throw new DAOException("UserDAOImpl. GetUserById failed. The user with the id=" + id +
+                        " does not exist.");
             }
 
             String login = resultSet.getString(UserConst.LOGIN);
@@ -102,7 +103,7 @@ public class UserDAOImpl implements UserDAO {
             user.setRole(role);
             user.setStatus(status);
         } catch (SQLException e) {
-            throw new DAOException("UserDAOImpl. GetUserById failed.", e);
+            throw new DAOException("UserDAOImpl. GetUserById failed. No connection.", e);
         } finally {
             try {
                 connection.close();

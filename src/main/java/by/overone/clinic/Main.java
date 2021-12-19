@@ -61,5 +61,6 @@ public class Main {
 //        userService.updateUserDetails(userDetail);
 //        System.out.println(userDAO.getInfoAllUser(19));
         System.out.println(userService.getAllUserInfo(19));
+        System.out.println(userService.getAllUsers());
     }
 }
