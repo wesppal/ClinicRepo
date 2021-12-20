@@ -3,6 +3,7 @@ package by.overone.clinic.dao.impl;
 import by.overone.clinic.dao.PetDAO;
 import by.overone.clinic.model.Pet;
 import by.overone.clinic.model.Status;
+import by.overone.clinic.model.User;
 import by.overone.clinic.util.DBConnect;
 import by.overone.clinic.util.constant.PetConst;
 import by.overone.clinic.util.exception.DAOException;
@@ -46,7 +47,7 @@ public class PetDAOImpl implements PetDAO {
             }
         } catch (SQLException e) {
             throw new DAOException("sad");
-        }finally {
+        } finally {
             try {
                 connection.close();
             } catch (SQLException e) {
@@ -58,7 +59,33 @@ public class PetDAOImpl implements PetDAO {
 
     @Override
     public Pet getPetById(long id) throws DAOException {
-        return null;
+        Pet pet = new Pet();
+        try {
+            Connection connection = DBConnect.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_PET_BY_ID_SQL);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (!resultSet.next()){
+                throw new DAOException("PetDAOImpl. GetPetById failed. The pet with the id=" + id +
+                        "does not exist.");
+            }
+            pet.setId(resultSet.getLong(PetConst.ID));
+            pet.setName(resultSet.getString(PetConst.NAME));
+            pet.setAge(resultSet.getInt(PetConst.AGE));
+            pet.setType(resultSet.getString(PetConst.TYPE));
+            pet.setOwner(resultSet.getString(PetConst.OWNER));
+            pet.setUser_id(resultSet.getLong(PetConst.USER_ID));
+            pet.setStatus(Status.valueOf(resultSet.getString(PetConst.STATUS).toUpperCase(Locale.ROOT)));
+        } catch (SQLException e) {
+            throw new DAOException("PetDAOImpl. getPetById failed. no connection.", e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return pet;
     }
 
     @Override
