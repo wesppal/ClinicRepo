@@ -1,67 +1,19 @@
 package by.overone.clinic;
 
 
-import by.overone.clinic.dao.impl.UserDAOImpl;
-import by.overone.clinic.dto.UserRegistrationDTO;
-import by.overone.clinic.model.UserDetail;
-import by.overone.clinic.service.UserService;
-import by.overone.clinic.service.impl.UserServiceImpl;
+import by.overone.clinic.dao.PetDAO;
+import by.overone.clinic.dao.impl.PetDAOImpl;
+import by.overone.clinic.service.PetService;
+import by.overone.clinic.service.impl.PetServiceImpl;
 import by.overone.clinic.util.exception.DAOException;
-import by.overone.clinic.util.exception.ServiceExceptions;
+import by.overone.clinic.util.exception.ServiceException;
 import by.overone.clinic.util.exception.ValidationException;
 
 
 public class Main {
-    public static void main(String[] args) throws DAOException, ServiceExceptions, ValidationException {
-        UserService userService = new UserServiceImpl();
-
-        //test service addUser
-        UserRegistrationDTO userRegistrationDTO = new UserRegistrationDTO();
-        userRegistrationDTO.setLogin("TestUser8");
-        userRegistrationDTO.setPassword("tested8");
-        userRegistrationDTO.setEmail("Test8@mail.ru");
-
-
-        try {
-            userService.addUser(userRegistrationDTO);
-        } catch (ServiceExceptions | ValidationException e) {
-            e.printStackTrace();
-        }
-
-        UserDAOImpl userDAO = new UserDAOImpl();
-
-        //test service getAllUsers
-
-//        try {
-//            userDAO.removeUserById(17);
-//        } catch (DAOException e) {
-//            e.printStackTrace();
-//        }
-
-
-//        userService.removeUserById(17);
-//        System.out.println("Find user - " + userService.getUserById(0));
-
-//        System.out.println("By id " + userDAO.getUserById(3));
-
-//        System.out.println(userService.getUserByFullname("Gon", "Friks"));
-//        userDAO.getAllUsers().stream().forEach(System.out::println);
-//
-        UserDetail userDetail = new UserDetail();
-        userDetail.setName("Вася");
-        userDetail.setSurname("Пупкин");
-        userDetail.setAddress("Minsk, ulica 15-6");
-        userDetail.setPhoneNumber("+375753332215");
-        userDetail.setId(19);
-        userDAO.updateUserDetails(userDetail);
-
-//        System.out.println(userDAO.UpdateUserDetails(userDetail));
-//        System.out.println(userDAO.getUserDetailById(3));
-
-//        System.out.println(userService.getUserDetailById(12));
-//        userService.updateUserDetails(userDetail);
-//        System.out.println(userDAO.getInfoAllUser(19));
-        System.out.println(userService.getAllUserInfo(19));
-        System.out.println(userService.getAllUsers());
+    public static void main(String[] args) throws DAOException, ServiceException, ValidationException {
+        PetService petService = new PetServiceImpl();
+        System.out.println(petService.getPetById(1));
+        System.out.println(petService.getPets());
     }
 }

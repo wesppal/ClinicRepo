@@ -20,7 +20,7 @@ public class PetDAOImpl implements PetDAO {
     private static Connection connection;
 
     private final static String GET_ALL_PETS_SQL = "SELECT * FROM pets where status = 'active'";
-    private final static String GET_PET_BY_ID_SQL = "SELECT * FROM pets WHERE id=(?)";
+    private final static String GET_PET_BY_ID_SQL = "SELECT * FROM pets WHERE pet_id=(?)";
     private final static String ADD_NEW_PET_SQL = "INSERT INTO user VALUE (0,?,?,?,?,?)";
 
 
@@ -61,11 +61,12 @@ public class PetDAOImpl implements PetDAO {
     public Pet getPetById(long id) throws DAOException {
         Pet pet = new Pet();
         try {
-            Connection connection = DBConnect.getConnection();
+            connection = DBConnect.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(GET_PET_BY_ID_SQL);
+            preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (!resultSet.next()){
+            if (!resultSet.next()) {
                 throw new DAOException("PetDAOImpl. GetPetById failed. The pet with the id=" + id +
                         "does not exist.");
             }

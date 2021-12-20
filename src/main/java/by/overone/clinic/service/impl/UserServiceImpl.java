@@ -9,7 +9,7 @@ import by.overone.clinic.model.User;
 import by.overone.clinic.model.UserDetail;
 import by.overone.clinic.service.UserService;
 import by.overone.clinic.util.exception.DAOException;
-import by.overone.clinic.util.exception.ServiceExceptions;
+import by.overone.clinic.util.exception.ServiceException;
 import by.overone.clinic.util.exception.ValidationException;
 import by.overone.clinic.util.validation.UserDetailValidate;
 import by.overone.clinic.util.validation.UserValidate;
@@ -23,21 +23,21 @@ public class UserServiceImpl implements UserService {
     private final UserDAO userDAO = new UserDAOImpl();
 
     @Override
-    public List<UserDataDTO> getAllUsers() throws ServiceExceptions {
+    public List<UserDataDTO> getAllUsers() throws ServiceException {
         List<User> users;
         try {
             users = userDAO.getAllUsers();
         } catch (DAOException e) {
-            throw new ServiceExceptions("UserServiceImpl. getAllUsers failed. Not connection.");
+            throw new ServiceException("UserServiceImpl. getAllUsers failed. Not connection.");
         }
         List<UserDataDTO> usersDataDTO;
-        usersDataDTO = users.stream().map(user -> new UserDataDTO(user.getId(),user.getLogin(),user.getEmail()))
+        usersDataDTO = users.stream().map(user -> new UserDataDTO(user.getId(), user.getLogin(), user.getEmail()))
                 .collect(Collectors.toList());
         return usersDataDTO;
     }
 
     @Override
-    public UserDataDTO getUserById(long id) throws ServiceExceptions, ValidationException {
+    public UserDataDTO getUserById(long id) throws ServiceException, ValidationException {
         UserDataDTO userDataDTO = new UserDataDTO();
         User user;
         if (!UserValidate.validateId(id)) {
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
         try {
             user = userDAO.getUserById(id);
         } catch (DAOException e) {
-            throw new ServiceExceptions("UserServiceImpl. getUserById failed. User not found.");
+            throw new ServiceException("UserServiceImpl. getUserById failed. User not found.");
         }
 
         userDataDTO.setId(user.getId());
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDataDTO getUserByFullname(String name, String surname) throws ServiceExceptions, ValidationException {
+    public UserDataDTO getUserByFullname(String name, String surname) throws ServiceException, ValidationException {
         if (UserValidate.validateFullnameDate(name, surname)) {
             throw new ValidationException("Incorrect user details: name, surname.");
         }
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
         try {
             user = userDAO.getUserByFullName(name, surname);
         } catch (DAOException e) {
-            throw new ServiceExceptions("UserServiceImpl. getUserById failed. User not found.");
+            throw new ServiceException("UserServiceImpl. getUserById failed. User not found.");
         }
 
         userDataDTO.setId(user.getId());
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDataDTO addUser(UserRegistrationDTO userRegistrationDTO) throws ServiceExceptions, ValidationException {
+    public UserDataDTO addUser(UserRegistrationDTO userRegistrationDTO) throws ServiceException, ValidationException {
         User user = new User();
         user.setLogin(userRegistrationDTO.getLogin());
         user.setPassword(userRegistrationDTO.getPassword());
@@ -92,37 +92,37 @@ public class UserServiceImpl implements UserService {
         try {
             user = userDAO.addUser(user);
         } catch (DAOException e) {
-            throw new ServiceExceptions("UserService. AddUser.User not added.", e);
+            throw new ServiceException("UserService. AddUser.User not added.", e);
         }
         return new UserDataDTO(0, user.getLogin(), user.getEmail());
     }
 
     @Override
-    public void removeUserById(long id) throws ServiceExceptions, ValidationException {
+    public void removeUserById(long id) throws ServiceException, ValidationException {
         UserDataDTO userDataDTO;
         userDataDTO = getUserById(id);
         try {
             userDAO.removeUserById(userDataDTO.getId());
         } catch (DAOException e) {
-            throw new ServiceExceptions("UserServiceImpl. removeUserById failed.");
+            throw new ServiceException("UserServiceImpl. removeUserById failed.");
         }
     }
 
     @Override
-    public boolean updateUserDetails(UserDetail userDetail) throws ServiceExceptions, ValidationException {
+    public boolean updateUserDetails(UserDetail userDetail) throws ServiceException, ValidationException {
         if (!UserDetailValidate.validateDetails(userDetail)) {
             throw new ValidationException("Incorrect details data");
         }
         try {
             userDAO.updateUserDetails(userDetail);
         } catch (DAOException e) {
-            throw new ServiceExceptions("UserServiceImpl. UpdateUserDetail failed.");
+            throw new ServiceException("UserServiceImpl. UpdateUserDetail failed.");
         }
         return true;
     }
 
     @Override
-    public UserDetail getUserDetailById(long id) throws ServiceExceptions, ValidationException {
+    public UserDetail getUserDetailById(long id) throws ServiceException, ValidationException {
         if (!UserValidate.validateId(id)) {
             throw new ValidationException("Incorrect user id.");
         }
@@ -130,13 +130,13 @@ public class UserServiceImpl implements UserService {
         try {
             userDetail = userDAO.getUserDetailById(id);
         } catch (DAOException e) {
-            throw new ServiceExceptions("UserServiceImpl. GetUserDetailById failed.");
+            throw new ServiceException("UserServiceImpl. GetUserDetailById failed.");
         }
         return userDetail;
     }
 
     @Override
-    public InfoAllUser getAllUserInfo(long id) throws ServiceExceptions, ValidationException {
+    public InfoAllUser getAllUserInfo(long id) throws ServiceException, ValidationException {
         if (!UserValidate.validateId(id)) {
             throw new ValidationException("Incorrect user id.");
         }
@@ -146,7 +146,7 @@ public class UserServiceImpl implements UserService {
             user = userDAO.getAllUserInfo(id);
 
         } catch (DAOException e) {
-            throw new ServiceExceptions("UserServiceImpl. getInfoAllUser failed.");
+            throw new ServiceException("UserServiceImpl. getInfoAllUser failed.");
         }
         return user;
     }
