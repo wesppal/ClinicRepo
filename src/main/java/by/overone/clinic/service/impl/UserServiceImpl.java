@@ -15,7 +15,6 @@ import by.overone.clinic.util.validation.UserDetailValidate;
 import by.overone.clinic.util.validation.UserValidate;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
