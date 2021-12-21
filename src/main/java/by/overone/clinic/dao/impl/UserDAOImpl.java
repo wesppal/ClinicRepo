@@ -258,7 +258,8 @@ public class UserDAOImpl implements UserDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (!resultSet.next()) {
-                throw new DAOException("UserDAOImpl. GetUserDetailById failed. This is no such user.");
+                throw new DAOException("UserDAOImpl. GetUserDetailById failed. This is no such user. " +
+                        "The user with the id=" + id + "does not exist.");
             }
 
             long userId = resultSet.getLong(UserDetailConst.ID);
@@ -272,14 +273,9 @@ public class UserDAOImpl implements UserDAO {
             userDetail.setSurname(surname);
             userDetail.setAddress(address);
             userDetail.setPhoneNumber(phoneNumber);
+            connection.close();
         } catch (SQLException e) {
             throw new DAOException("UserDAOImpl. GetUserById failed.", e);
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return userDetail;
     }

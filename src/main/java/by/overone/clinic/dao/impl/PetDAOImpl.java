@@ -1,33 +1,31 @@
 package by.overone.clinic.dao.impl;
 
 import by.overone.clinic.dao.PetDAO;
+import by.overone.clinic.dao.UserDAO;
 import by.overone.clinic.model.Pet;
 import by.overone.clinic.model.Status;
-import by.overone.clinic.model.User;
+import by.overone.clinic.model.UserDetail;
 import by.overone.clinic.util.DBConnect;
 import by.overone.clinic.util.constant.PetConst;
 import by.overone.clinic.util.exception.DAOException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class PetDAOImpl implements PetDAO {
     private static Connection connection;
+    private UserDAO userDAO = new UserDAOImpl();
 
     private final static String GET_ALL_PETS_SQL = "SELECT * FROM pets where status = 'active'";
     private final static String GET_PET_BY_ID_SQL = "SELECT * FROM pets WHERE pet_id=(?)";
-    private final static String ADD_NEW_PET_SQL = "INSERT INTO user VALUE (0,?,?,?,?,?)";
+    private final static String ADD_NEW_PET_SQL = "INSERT INTO pets VALUE (0,?,?,?,?,?,?)";
 
 
     @Override
     public List<Pet> getPets() throws DAOException {
         List<Pet> pets = new ArrayList<>();
-
         try {
             connection = DBConnect.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_PETS_SQL);
@@ -91,7 +89,34 @@ public class PetDAOImpl implements PetDAO {
 
     @Override
     public Pet addPet(long user_id, Pet pet) throws DAOException {
-        return null;
+        UserDetail user;
+        user = userDAO.getUserDetailById(user_id);
+
+        try {
+            connection = DBConnect.getConnection();
+            connection.setAutoCommit(false);
+
+            PreparedStatement preparedStatement = connection.prepareStatement(ADD_NEW_PET_SQL,
+                    Statement.RETURN_GENERATED_KEYS);
+
+            preparedStatement.setString(1, pet.getName());
+            preparedStatement.setInt(2, pet.getAge());
+            preparedStatement.setString(3, pet.getType());
+            preparedStatement.setString(4, user.getName());
+            preparedStatement.setLong(5, user_id);
+            preparedStatement.setString(6, Status.ACTIVE.name().toUpperCase(Locale.ROOT));
+            preparedStatement.executeUpdate();
+
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            while (resultSet.next()) {
+               pet.setId(resultSet.getLong(1));
+            }
+            pet.setStatus(Status.ACTIVE);
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return pet;
     }
 
     @Override
