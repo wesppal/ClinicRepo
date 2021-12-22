@@ -21,6 +21,8 @@ public class PetDAOImpl implements PetDAO {
     private final static String GET_ALL_PETS_SQL = "SELECT * FROM pets where status = 'active'";
     private final static String GET_PET_BY_ID_SQL = "SELECT * FROM pets WHERE pet_id=(?)";
     private final static String ADD_NEW_PET_SQL = "INSERT INTO pets VALUE (0,?,?,?,?,?,?)";
+    private final static String UPDATE_PET_STATUS_SQL = "UPDATE pets SET status =(?) WHERE id=(?)";
+    private final static String UPDATE_PET_SQL = "UPDATE pets SET status =(?) WHERE id=(?)";
 
 
     @Override
@@ -121,12 +123,42 @@ public class PetDAOImpl implements PetDAO {
 
     @Override
     public Pet updatePet(long id, Pet pet) throws DAOException {
+        try {
+            connection = DBConnect.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PET_STATUS_SQL);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     @Override
-    public boolean deletePet(long id) throws DAOException {
-        return false;
+    public void deletePet(long id) throws DAOException {
+        updatePetStatus(id, Status.DELETED);
+    }
+
+    private void updatePetStatus(long id, Status status) throws DAOException {
+        try {
+            connection = DBConnect.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PET_STATUS_SQL);
+            preparedStatement.setString(1, status.toString());
+            preparedStatement.setLong(2, id);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+                throw new DAOException("UserDAOImpl. Already removed.");
+            } catch (SQLException ex) {
+                throw new DAOException("UserDAOImpl. Remove failed.");
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
     }
 
     @Override

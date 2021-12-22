@@ -15,7 +15,7 @@ public interface PetDAO {
 
     Pet updatePet(long id, Pet pet) throws DAOException;
 
-    boolean deletePet(long id) throws DAOException;
+    void deletePet(long id) throws DAOException;
 
     List<Pet> getPetByUserId(long user_id) throws DAOException;
 }
