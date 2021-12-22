@@ -1,6 +1,7 @@
 package by.overone.clinic.service;
 
 import by.overone.clinic.model.Pet;
+import by.overone.clinic.util.exception.DAOException;
 import by.overone.clinic.util.exception.ServiceException;
 import by.overone.clinic.util.exception.ValidationException;
 
@@ -17,5 +18,5 @@ public interface PetService {
 
     boolean deletePet(long id) throws ServiceException, ValidationException;
 
-    List<Pet> getPetByUserId(long user_id) throws ServiceException;
+    List<Pet> getPetByUserId(long user_id) throws ServiceException, DAOException, ValidationException;
 }

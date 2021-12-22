@@ -1,15 +1,19 @@
 package by.overone.clinic.service.impl;
 
 import by.overone.clinic.dao.PetDAO;
+import by.overone.clinic.dao.UserDAO;
 import by.overone.clinic.dao.impl.PetDAOImpl;
+import by.overone.clinic.dao.impl.UserDAOImpl;
 import by.overone.clinic.model.Pet;
 import by.overone.clinic.model.Status;
 import by.overone.clinic.service.PetService;
+import by.overone.clinic.service.UserService;
 import by.overone.clinic.util.exception.DAOException;
 import by.overone.clinic.util.exception.ServiceException;
 import by.overone.clinic.util.exception.ValidationException;
 import by.overone.clinic.util.validation.PetValidate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PetServiceImpl implements PetService {
@@ -64,7 +68,15 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public List<Pet> getPetByUserId(long user_id) throws ServiceException {
-        return null;
+    public List<Pet> getPetByUserId(long user_id) throws ServiceException, ValidationException {
+        UserService userService = new UserServiceImpl();
+        userService.getUserById(user_id);
+        List<Pet> pets = new ArrayList<>();
+        try {
+            pets = petDAO.getPetByUserId(user_id);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+        return pets;
     }
 }

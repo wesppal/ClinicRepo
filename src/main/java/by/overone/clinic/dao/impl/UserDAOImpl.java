@@ -102,14 +102,9 @@ public class UserDAOImpl implements UserDAO {
             user.setEmail(email);
             user.setRole(role);
             user.setStatus(status);
+            connection.close();
         } catch (SQLException e) {
             throw new DAOException("UserDAOImpl. GetUserById failed. No connection.", e);
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return user;
     }
@@ -141,14 +136,9 @@ public class UserDAOImpl implements UserDAO {
             user.setEmail(email);
             user.setRole(role);
             user.setStatus(status);
+            connection.close();
         } catch (SQLException | DAOException e) {
             throw new DAOException("UserDAOImpl. GetUserByFullname failed.", e);
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return user;
     }
