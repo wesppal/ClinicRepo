@@ -48,8 +48,13 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public Pet updatePet(long id, Pet pet) throws ServiceException {
-        return null;
+    public void updatePet(long id, Pet pet) throws ServiceException {
+        getPetById(id);
+        try {
+            petDAO.updatePet(id, pet);
+        } catch (DAOException e) {
+            throw new ServiceException("PetServiceImpl. UpdatePet failed. Error connection");
+        }
     }
 
     @Override

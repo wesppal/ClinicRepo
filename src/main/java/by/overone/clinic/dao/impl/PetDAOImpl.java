@@ -79,14 +79,9 @@ public class PetDAOImpl implements PetDAO {
             pet.setOwner(resultSet.getString(PetConst.OWNER));
             pet.setUser_id(resultSet.getLong(PetConst.USER_ID));
             pet.setStatus(Status.valueOf(resultSet.getString(PetConst.STATUS).toUpperCase(Locale.ROOT)));
+            connection.close();
         } catch (SQLException e) {
             throw new DAOException("PetDAOImpl. getPetById failed. no connection.", e);
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return pet;
     }

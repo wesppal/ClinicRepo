@@ -14,7 +14,7 @@ public interface PetService {
 
     Pet addPet(long user_id, Pet pet) throws ServiceException;
 
-    Pet updatePet(long id, Pet pet) throws ServiceException;
+    void updatePet(long id, Pet pet) throws ServiceException;
 
     boolean deletePet(long id) throws ServiceException, ValidationException;
 
