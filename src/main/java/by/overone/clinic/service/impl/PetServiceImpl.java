@@ -3,9 +3,12 @@ package by.overone.clinic.service.impl;
 import by.overone.clinic.dao.PetDAO;
 import by.overone.clinic.dao.impl.PetDAOImpl;
 import by.overone.clinic.model.Pet;
+import by.overone.clinic.model.Status;
 import by.overone.clinic.service.PetService;
 import by.overone.clinic.util.exception.DAOException;
 import by.overone.clinic.util.exception.ServiceException;
+import by.overone.clinic.util.exception.ValidationException;
+import by.overone.clinic.util.validation.PetValidate;
 
 import java.util.List;
 
@@ -46,8 +49,18 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public boolean deletePet(long id) throws ServiceException {
-        return false;
+    public boolean deletePet(long id) throws ServiceException, ValidationException {
+        if (!PetValidate.validateId(id)) {
+            throw new ValidationException("PetServiceImpl. DeletePet failed. Id is incorrect.");
+        }
+        Pet pet;
+        try {
+            petDAO.deletePet(id);
+        } catch (DAOException e) {
+            throw new ServiceException("PetServiceImpl. DeletePet failed.");
+        }
+        pet = getPetById(id);
+        return pet.getStatus().toString().equals(Status.DELETED.toString());
     }
 
     @Override

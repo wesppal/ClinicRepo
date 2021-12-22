@@ -11,6 +11,7 @@ import by.overone.clinic.service.UserService;
 import by.overone.clinic.util.exception.DAOException;
 import by.overone.clinic.util.exception.ServiceException;
 import by.overone.clinic.util.exception.ValidationException;
+import by.overone.clinic.util.validation.PetValidate;
 import by.overone.clinic.util.validation.UserDetailValidate;
 import by.overone.clinic.util.validation.UserValidate;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -99,6 +100,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void removeUserById(long id) throws ServiceException, ValidationException {
+        if (!UserValidate.validateId(id)) {
+            throw new ValidationException("UserServiceImpl. RemoveUserById failed. Id is incorrect.");
+        }
         UserDataDTO userDataDTO;
         userDataDTO = getUserById(id);
         try {

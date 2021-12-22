@@ -2,6 +2,7 @@ package by.overone.clinic.service;
 
 import by.overone.clinic.model.Pet;
 import by.overone.clinic.util.exception.ServiceException;
+import by.overone.clinic.util.exception.ValidationException;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface PetService {
 
     Pet updatePet(long id, Pet pet) throws ServiceException;
 
-    boolean deletePet(long id) throws ServiceException;
+    boolean deletePet(long id) throws ServiceException, ValidationException;
 
     List<Pet> getPetByUserId(long user_id) throws ServiceException;
 }
