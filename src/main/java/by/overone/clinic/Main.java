@@ -18,13 +18,14 @@ import by.overone.clinic.util.exception.ValidationException;
 public class Main {
     public static void main(String[] args) throws DAOException, ServiceException, ValidationException {
         PetDAO petDAO = new PetDAOImpl();
-        Pet pet = new Pet();
-        pet.setName("vasya");
+//        Pet pet = new Pet();
+//        pet.setName("vasya");
 //        pet.setAge(2);
-        pet.setType("cat");
+//        pet.setType("cat");
 //        pet.setOwner("Pol");
 //        pet.setUser_id(4);
-        System.out.println(petDAO.updatePet(4, pet));
+//        System.out.println(petDAO.updatePet(4, pet));
 //            petDAO.deletePet(3);
+        System.out.println(petDAO.getPetByUserId(17));
     }
 }

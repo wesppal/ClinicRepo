@@ -24,8 +24,7 @@ public class PetDAOImpl implements PetDAO {
     private final static String ADD_NEW_PET_SQL = "INSERT INTO pets VALUE (0,?,?,?,?,?,?)";
     private final static String UPDATE_PET_STATUS_SQL = "UPDATE pets SET status =(?) WHERE pet_id=(?)";
     private final static String UPDATE_PET_SQL = "UPDATE pets SET";
-//    private final static String UPDATE_PET_SQL = "UPDATE pets SET name = (?), age = (?), type_of_pet = (?), " +
-//            "owner = (?), user_id = (?), status = 'ACTIVE' where pet_id = (?)";
+    private final static String GET_PETS_BY_USER_ID_SQL = "SELECT * FROM pets WHERE user_id=(?)";
 
 
     @Override
@@ -49,7 +48,7 @@ public class PetDAOImpl implements PetDAO {
                 pets.add(pet);
             }
         } catch (SQLException e) {
-            throw new DAOException("sad");
+            throw new DAOException("PetDAOImpl. GetPets failed. Not connection.");
         } finally {
             try {
                 connection.close();
@@ -126,7 +125,7 @@ public class PetDAOImpl implements PetDAO {
 
     @Override
     public Pet updatePet(long id, Pet pet) throws DAOException {
-        updatePetStatus(id,Status.ACTIVE);
+        updatePetStatus(id, Status.ACTIVE);
         try {
             connection = DBConnect.getConnection();
             PetParamDTO petParamDTO = new PetParamDTO();
@@ -201,6 +200,27 @@ public class PetDAOImpl implements PetDAO {
 
     @Override
     public List<Pet> getPetByUserId(long user_id) throws DAOException {
-        return null;
+        List<Pet> pets = new ArrayList<>();
+        try {
+            connection = DBConnect.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_PETS_BY_USER_ID_SQL);
+            preparedStatement.setLong(1, user_id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Pet pet = new Pet();
+                pet.setId(resultSet.getLong(PetConst.ID));
+                pet.setName(resultSet.getString(PetConst.NAME));
+                pet.setAge(resultSet.getInt(PetConst.AGE));
+                pet.setType(resultSet.getString(PetConst.TYPE));
+                pet.setOwner(resultSet.getString(PetConst.OWNER));
+                pet.setUser_id(resultSet.getLong(PetConst.USER_ID));
+                pet.setStatus(Status.valueOf(resultSet.getString(PetConst.STATUS)));
+                pets.add(pet);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return pets;
     }
 }
