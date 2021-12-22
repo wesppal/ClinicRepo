@@ -22,7 +22,7 @@ public class PetDAOImpl implements PetDAO {
     private final static String GET_ALL_PETS_SQL = "SELECT * FROM pets where status = 'ACTIVE'";
     private final static String GET_PET_BY_ID_SQL = "SELECT * FROM pets WHERE pet_id=(?)";
     private final static String ADD_NEW_PET_SQL = "INSERT INTO pets VALUE (0,?,?,?,?,?,?)";
-    private final static String UPDATE_PET_STATUS_SQL = "UPDATE pets SET status =(?) WHERE id=(?)";
+    private final static String UPDATE_PET_STATUS_SQL = "UPDATE pets SET status =(?) WHERE pet_id=(?)";
     private final static String UPDATE_PET_SQL = "UPDATE pets SET";
 //    private final static String UPDATE_PET_SQL = "UPDATE pets SET name = (?), age = (?), type_of_pet = (?), " +
 //            "owner = (?), user_id = (?), status = 'ACTIVE' where pet_id = (?)";
@@ -126,6 +126,7 @@ public class PetDAOImpl implements PetDAO {
 
     @Override
     public Pet updatePet(long id, Pet pet) throws DAOException {
+        updatePetStatus(id,Status.ACTIVE);
         try {
             connection = DBConnect.getConnection();
             PetParamDTO petParamDTO = new PetParamDTO();
