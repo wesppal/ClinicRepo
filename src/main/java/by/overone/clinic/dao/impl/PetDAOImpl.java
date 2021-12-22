@@ -2,6 +2,7 @@ package by.overone.clinic.dao.impl;
 
 import by.overone.clinic.dao.PetDAO;
 import by.overone.clinic.dao.UserDAO;
+import by.overone.clinic.dto.PetParamDTO;
 import by.overone.clinic.model.Pet;
 import by.overone.clinic.model.Status;
 import by.overone.clinic.model.UserDetail;
@@ -18,11 +19,13 @@ public class PetDAOImpl implements PetDAO {
     private static Connection connection;
     private UserDAO userDAO = new UserDAOImpl();
 
-    private final static String GET_ALL_PETS_SQL = "SELECT * FROM pets where status = 'active'";
+    private final static String GET_ALL_PETS_SQL = "SELECT * FROM pets where status = 'ACTIVE'";
     private final static String GET_PET_BY_ID_SQL = "SELECT * FROM pets WHERE pet_id=(?)";
     private final static String ADD_NEW_PET_SQL = "INSERT INTO pets VALUE (0,?,?,?,?,?,?)";
     private final static String UPDATE_PET_STATUS_SQL = "UPDATE pets SET status =(?) WHERE id=(?)";
-    private final static String UPDATE_PET_SQL = "UPDATE pets SET status =(?) WHERE id=(?)";
+    private final static String UPDATE_PET_SQL = "UPDATE pets SET";
+//    private final static String UPDATE_PET_SQL = "UPDATE pets SET name = (?), age = (?), type_of_pet = (?), " +
+//            "owner = (?), user_id = (?), status = 'ACTIVE' where pet_id = (?)";
 
 
     @Override
@@ -111,7 +114,7 @@ public class PetDAOImpl implements PetDAO {
 
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             while (resultSet.next()) {
-               pet.setId(resultSet.getLong(1));
+                pet.setId(resultSet.getLong(1));
             }
             pet.setStatus(Status.ACTIVE);
             connection.commit();
@@ -125,11 +128,45 @@ public class PetDAOImpl implements PetDAO {
     public Pet updatePet(long id, Pet pet) throws DAOException {
         try {
             connection = DBConnect.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PET_STATUS_SQL);
+            PetParamDTO petParamDTO = new PetParamDTO();
+            petParamDTO = petParamDTO.copyParam(petParamDTO, pet);
+            String params = petParamDTO.getParam().toString();
+
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PET_SQL + params);
+            int i = 1;
+            if (pet.getName() != null) {
+                preparedStatement.setString(i, pet.getName());
+                i++;
+            }
+            if (pet.getAge() != 0) {
+                preparedStatement.setInt(i, pet.getAge());
+                i++;
+            }
+            if (pet.getType() != null) {
+                preparedStatement.setString(i, pet.getType());
+                i++;
+            }
+            if (pet.getOwner() != null) {
+                preparedStatement.setString(i, pet.getOwner());
+                i++;
+            }
+            if (pet.getUser_id() != 0) {
+                preparedStatement.setLong(i, pet.getUser_id());
+                i++;
+            }
+            preparedStatement.setLong(i, id);
+
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException("PetDAOImpl. UpdatePet failed. Not connection db.");
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        return null;
+        return pet;
     }
 
     @Override
@@ -150,7 +187,7 @@ public class PetDAOImpl implements PetDAO {
                 connection.rollback();
                 throw new DAOException("UserDAOImpl. Already removed.");
             } catch (SQLException ex) {
-                throw new DAOException("UserDAOImpl. Remove failed.");
+                throw new DAOException("UserDAOImpl. Status update failed.");
             } finally {
                 try {
                     connection.close();

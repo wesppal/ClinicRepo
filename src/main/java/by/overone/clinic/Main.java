@@ -19,13 +19,12 @@ public class Main {
     public static void main(String[] args) throws DAOException, ServiceException, ValidationException {
         PetDAO petDAO = new PetDAOImpl();
         Pet pet = new Pet();
-        pet.setName("Reks");
-        pet.setType("dog");
-        pet.setUser_id(11);
-        pet.setOwner("Polyna");
+//        pet.setName("Reks");
         pet.setAge(2);
-        pet.setUser_id(11);
-        System.out.println(petDAO.addPet(11,pet));
+//        pet.setType("dog");
+        pet.setOwner("Pol");
+        pet.setUser_id(4);
+        System.out.println(petDAO.updatePet(4, pet));
 
     }
 }
