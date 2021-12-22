@@ -12,7 +12,7 @@ public interface PetService {
 
     Pet getPetById(long id) throws ServiceException;
 
-    Pet addPet(long user_id, Pet pet) throws ServiceException;
+    Pet addPet(long user_id, Pet pet) throws ServiceException, ValidationException;
 
     void updatePet(long id, Pet pet) throws ServiceException;
 

@@ -6,6 +6,7 @@ import by.overone.clinic.dao.impl.PetDAOImpl;
 import by.overone.clinic.dao.impl.UserDAOImpl;
 import by.overone.clinic.model.Pet;
 import by.overone.clinic.model.Status;
+import by.overone.clinic.model.User;
 import by.overone.clinic.service.PetService;
 import by.overone.clinic.service.UserService;
 import by.overone.clinic.util.exception.DAOException;
@@ -43,7 +44,14 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public Pet addPet(long user_id, Pet pet) throws ServiceException {
+    public Pet addPet(long user_id, Pet pet) throws ServiceException, ValidationException {
+        UserService userService = new UserServiceImpl();
+        userService.getUserById(user_id);
+        try {
+            petDAO.addPet(user_id, pet);
+        } catch (DAOException e) {
+            throw new ServiceException("PetServiceImpl. AddPet failed. Error connection");
+        }
         return null;
     }
 

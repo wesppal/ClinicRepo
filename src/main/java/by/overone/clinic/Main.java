@@ -19,12 +19,12 @@ public class Main {
         PetDAO petDAO = new PetDAOImpl();
         PetService petService = new PetServiceImpl();
         Pet pet = new Pet();
-        pet.setName("goldy");
+        pet.setName("prank");
         pet.setAge(1);
-        pet.setType("fish");
+        pet.setType("cat");
         pet.setOwner("Gon");
         pet.setUser_id(3);
-        petService.updatePet(7,pet);
+        petService.addPet(3,pet);
 //        petDAO.updatePet(3,pet);
     }
 }
