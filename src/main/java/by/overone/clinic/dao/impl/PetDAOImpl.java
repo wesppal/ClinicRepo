@@ -17,7 +17,7 @@ import java.util.Locale;
 
 public class PetDAOImpl implements PetDAO {
     private static Connection connection;
-    private UserDAO userDAO = new UserDAOImpl();
+    private final UserDAO userDAO = new UserDAOImpl();
 
     private final static String GET_ALL_PETS_SQL = "SELECT * FROM pets where status = 'ACTIVE'";
     private final static String GET_PET_BY_ID_SQL = "SELECT * FROM pets WHERE pet_id=(?)";
@@ -219,7 +219,7 @@ public class PetDAOImpl implements PetDAO {
                 pets.add(pet);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DAOException("PetDAOImpl. GetPetByUserId failed. Not connection db.");
         }
         return pets;
     }
