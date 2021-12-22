@@ -20,12 +20,11 @@ public class Main {
         PetDAO petDAO = new PetDAOImpl();
         Pet pet = new Pet();
         pet.setName("Reks");
-        pet.setType("dog");
-        pet.setUser_id(11);
+//        pet.setAge(3);
+//        pet.setType("dog");
         pet.setOwner("Polyna");
-        pet.setAge(2);
-        pet.setUser_id(11);
-        System.out.println(petDAO.addPet(11,pet));
+        pet.setUser_id(17);
+        System.out.println(petDAO.updatePet(5, pet));
 
     }
 }

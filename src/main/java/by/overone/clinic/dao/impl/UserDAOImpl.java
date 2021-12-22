@@ -25,7 +25,7 @@ public class UserDAOImpl implements UserDAO {
     private final static String ADD_USER_DETAILS_SQL = "UPDATE details SET name =(?), surname = (?), address = (?), " +
             "phoneNumber = (?) WHERE (user_id)=(?)";
     private final static String GET_USER_DETAIL_BY_ID_SQL = "SELECT * FROM details WHERE user_id=(?)";
-    private final static String GET_INFO_ALL_USER_BY_ID_SQL = " SELECT distinct * FROM user" +
+    private final static String GET_INFO_ALL_USER_BY_ID_SQL = "SELECT distinct * FROM user" +
             " join  details on user.id = details.user_id where id=(?)";
 
 
